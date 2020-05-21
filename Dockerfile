@@ -1,10 +1,10 @@
 FROM gradle:4.7.0-jdk8-alpine AS build
 
-ADD --chown=gradle:gradle ./* ./
-RUN gradle build --no-daemon -x test && \
+ADD --chown=gradle:gradle ./ ./
+RUN gradle build --no-daemon -x test -x findbugsMain -x findbugsTest -x pmdMain -x pmdTest -x checkstyleMain -x checkstyleTest && \
     mkdir result && \
     mv build/resources/main/application.properties ./result && \
-    mv build/libs/gradle-*.jar ./result/backend.jar
+    ls -la build/libs && mv build/libs/gradle.jar ./result/backend.jar
 
 
 
