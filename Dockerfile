@@ -13,6 +13,7 @@ RUN groupadd -r back && useradd -r -g back back
 WORKDIR /opt/backend
 COPY --from=build --chown=back:back /home/gradle/result/* ./
 USER back
+EXPOSE 8080
 ENTRYPOINT [ "java", "-jar", "/opt/backend/backend.jar", "--spring.config.location=file:/opt/backend/" ]
 
 ARG DEFAULT_DB_URL
