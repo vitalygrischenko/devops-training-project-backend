@@ -1,16 +1,12 @@
 FROM gradle:4.7.0-jdk8-alpine AS build
 LABEL maintainer="vitalygrischenko@gmail.com"
 
-ARG REPO_URL="https://github.com/vitamin-b12/devops-training-project-backend.git"
 USER root
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git \
     && rm -rf /var/cache/apk/*
 WORKDIR /home/gradle
-RUN git clone ${REPO_URL} \
-    && mv devops-training-project-backend/* ${PWD} \
-    && rm -rf devops-training-project-* \
-    && chown -R gradle:gradle ${PWD}
+ADD --chown=gradle:gradle ./ ./
 RUN if [ ! -f ./gradlew ]; then \
             gradle \
                 --quiet \
