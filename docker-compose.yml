@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+
+  frontend:
+    build:
+        context: ./frontend
+        args:
+          API_URL: "http://192.168.1.36:8080"
+    container_name: frontend
+    hostname: frontend
+    ports:
+      - "80:80"
+    networks:
+      - training
+    restart: on-failure
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    links:
+      - "backend"
+
+  backend:
+    build:
+        context: ./backend
+    container_name: backend
+    hostname: backend
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USERNAME: backend
+      DB_NAME: backend_db
+      DB_PASSWORD: P@ssw0rd
+      DB_URL: db
+    networks:
+      - training
+    restart: on-failure
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+          
+    depends_on:
+        - db
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    hostname: db
+    networks:
+      - training
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@$$w0rd
+      MYSQL_DATABASE: backend_db
+      MYSQL_USER: backend
+      MYSQL_PASSWORD: P@ssw0rd
+
+networks:
+  training:
+  
