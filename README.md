@@ -59,7 +59,7 @@ To start project with
     ./gradlew bootRun
 or
     
-    ./gradle build && java -jar ./build/lib/*.jar 
+    ./gradlew build && java -jar ./build/lib/*.jar 
 
 you need to define next environment variables:
 ```
